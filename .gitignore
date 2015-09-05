@@ -9,3 +9,4 @@ objectify-gwt.iml
 .svn
 .gwt
 .gradle
+/bin

@@ -1,0 +1,79 @@
+buildscript {
+	// Dependency Versions
+	ext{
+		gaeVer = '1.9.19'
+		gwtVer = '2.7.0'
+	}
+	
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+
+	dependencies {
+		classpath "com.google.appengine:gradle-appengine-plugin:$gaeVer"
+		classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+	}
+}
+
+ext.publisher = [
+	projVer: '0.5.0',
+	projGroup: 'com.blueesoteric.elementalist',
+	projArtifactPrefix: 'el',
+	rpcExcludeGroup: ['com.google.gwt','com.google.appengine','com.googlecode.objectify','com.gdevelop.gwt.syncrpc'],
+	rpcExcludeArtifact: ['hermes-server-api','moirai-server-api']
+]
+
+repositories{
+	mavenCentral()
+	mavenLocal()
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'appengine'
+apply plugin: 'gwt'
+
+dependencies {
+  	compile "com.google.gwt:gwt-user:$gwtVer"
+	compile "com.google.gwt:gwt-dev:$gwtVer"
+	compile "com.blueesoteric.hermes:hermes-server-api:0.1.1"	
+	compile "joda-time:joda-time:2.7"	
+	compile "com.google.appengine:appengine-api-1.0-sdk:$gaeVer"
+	compile "com.blueesoteric.moirai:moirai-server-api:0.1.0"
+	appengineSdk "com.google.appengine:appengine-java-sdk:$gaeVer"
+
+	testCompile 'junit:junit:4.11'
+	testCompile "com.google.appengine:appengine-testing:$gaeVer"
+	testCompile "com.google.appengine:appengine-api-labs:$gaeVer"
+	testCompile "com.google.appengine:appengine-api-stubs:$gaeVer"
+	testCompile "com.blueesoteric.gyver.mo:mo-gae:0.1.1"
+}
+
+sourceCompatibility = 1.7
+
+eclipse {
+	jdt {
+    	//if you want to alter the java versions (by default they are configured with gradle java plugin settings):
+    	sourceCompatibility = 1.7
+    	targetCompatibility = 1.7
+  	}
+}
+
+gwt{
+	//gwtVersion='2.7.0' // Including this seems to remove -user and -dev, along with several app engine dependencies from the gradle listing in Eclipse
+	modules 'com.blueesoteric.hermes.Hermes'
+	devModules 'com.blueesoteric.hermes.Hermes'
+}
+
+appengine {
+  downloadSdk = true
+   	jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
+  	httpPort = 8085
+  	appcfg{
+  		oauth2 = true
+  	}
+}
+
+apply from: 'publishing.gradle'
