@@ -1,0 +1,72 @@
+/**
+ * V0.1.0 Blue Esoteric Server Api Publisher Script
+ *
+ * Define following in build.gradle
+ *
+ *
+ * ext.publisher = [
+ *		projVer: 'VERSION',
+ *		projGroup: 'GROUP.NAME',
+ *		projArtifactPrefix: 'PREFIX',
+ * 		rpcExcludeGroup: ['group.first','group.second']
+ * ]
+ *
+ */
+apply plugin: 'maven-publish'
+
+/********** Android Client Library **********/
+task clientApiJar(type: Jar){
+	baseName = 'clientApi'
+	from sourceSets.main.output
+	from sourceSets.main.allJava
+	include '**/shared/**'
+}
+
+task clientApiSourcesJar(type: Jar, dependsOn:classes) {
+    from sourceSets.main.allJava
+	include '**/shared/**'
+}
+
+task clientApiJavadoc(type: Javadoc){
+	source = sourceSets.main.allJava
+	include '**/shared/**'
+	destinationDir new File(rootProject.buildDir,'apiJavaDoc')
+	destinationDir.mkdirs()
+}
+
+task clientApiJavadocJar(type: Jar, dependsOn:clientApiJavadoc) {
+    classifier = 'javadoc'
+    from clientApiJavadoc.destinationDir
+}
+
+publishing{
+	publications{
+		projAndroidClientLibrary(MavenPublication){
+			groupId publisher.projGroup
+			artifactId "$publisher.projArtifactPrefix"
+			version publisher.projVer
+			
+			artifact clientApiJar
+			artifact clientApiSourcesJar{
+				classifier "sources"
+			}
+			artifact clientApiJavadocJar{
+				classifier 'javadoc'
+			}
+			// Work-around for missing dependencies: http://stackoverflow.com/a/24764713/1544046
+			pom.withXml {
+     			def dependenciesNode = asNode().appendNode('dependencies')
+    
+        		// Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+        		configurations.compile.allDependencies.each {
+	        		if(!publisher.rpcExcludeGroup.contains(it.group)){
+    	       			def dependencyNode = dependenciesNode.appendNode('dependency')
+        	   			dependencyNode.appendNode('groupId', it.group)
+           				dependencyNode.appendNode('artifactId', it.name)
+            			dependencyNode.appendNode('version', it.version)
+            		}
+        		}
+			}
+		}
+	}
+}

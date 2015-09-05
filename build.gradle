@@ -17,11 +17,11 @@ buildscript {
 }
 
 ext.publisher = [
-	projVer: '0.5.0',
-	projGroup: 'com.blueesoteric.elementalist',
-	projArtifactPrefix: 'el',
-	rpcExcludeGroup: ['com.google.gwt','com.google.appengine','com.googlecode.objectify','com.gdevelop.gwt.syncrpc'],
-	rpcExcludeArtifact: ['hermes-server-api','moirai-server-api']
+	projVer: '1.2.3',
+	projGroup: 'com.blueesoteric.objectify',
+	projArtifactPrefix: 'objectify-gwt-android',
+	rpcExcludeGroup: ['com.google.gwt','com.google.appengine','com.googlecode.objectify'],
+	rpcExcludeArtifact: []
 ]
 
 repositories{
@@ -37,18 +37,15 @@ apply plugin: 'gwt'
 
 dependencies {
   	compile "com.google.gwt:gwt-user:$gwtVer"
-	compile "com.google.gwt:gwt-dev:$gwtVer"
-	compile "com.blueesoteric.hermes:hermes-server-api:0.1.1"	
-	compile "joda-time:joda-time:2.7"	
+	compile "com.google.gwt:gwt-dev:$gwtVer"	
+	compile "com.googlecode.objectify:objectify:5.1.7"
 	compile "com.google.appengine:appengine-api-1.0-sdk:$gaeVer"
-	compile "com.blueesoteric.moirai:moirai-server-api:0.1.0"
 	appengineSdk "com.google.appengine:appengine-java-sdk:$gaeVer"
 
 	testCompile 'junit:junit:4.11'
 	testCompile "com.google.appengine:appengine-testing:$gaeVer"
 	testCompile "com.google.appengine:appengine-api-labs:$gaeVer"
 	testCompile "com.google.appengine:appengine-api-stubs:$gaeVer"
-	testCompile "com.blueesoteric.gyver.mo:mo-gae:0.1.1"
 }
 
 sourceCompatibility = 1.7
@@ -61,11 +58,11 @@ eclipse {
   	}
 }
 
-gwt{
+//gwt{
 	//gwtVersion='2.7.0' // Including this seems to remove -user and -dev, along with several app engine dependencies from the gradle listing in Eclipse
-	modules 'com.blueesoteric.hermes.Hermes'
-	devModules 'com.blueesoteric.hermes.Hermes'
-}
+//	modules 'com.blueesoteric.hermes.Hermes'
+//	devModules 'com.blueesoteric.hermes.Hermes'
+//}
 
 appengine {
   downloadSdk = true
@@ -76,4 +73,4 @@ appengine {
   	}
 }
 
-apply from: 'publishing.gradle'
+//apply from: 'publishing.gradle'
