@@ -33,13 +33,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'war'
 apply plugin: 'appengine'
-apply plugin: 'gwt'
+//apply plugin: 'gwt'
 
 dependencies {
   	compile "com.google.gwt:gwt-user:$gwtVer"
 	compile "com.google.gwt:gwt-dev:$gwtVer"	
 	compile "com.googlecode.objectify:objectify:5.1.7"
 	compile "com.google.appengine:appengine-api-1.0-sdk:$gaeVer"
+
 	appengineSdk "com.google.appengine:appengine-java-sdk:$gaeVer"
 
 	testCompile 'junit:junit:4.11'
@@ -48,7 +49,16 @@ dependencies {
 	testCompile "com.google.appengine:appengine-api-stubs:$gaeVer"
 }
 
+sourceSets{
+	main{
+		java{
+			srcDirs = ['src/main/resources/com/google/appengine/super','src/main/resources/com/googlecode/objectify/super']
+		}
+	}
+}
+
 sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 eclipse {
 	jdt {
@@ -73,4 +83,4 @@ appengine {
   	}
 }
 
-//apply from: 'publishing.gradle'
+apply from: 'publishing.gradle'

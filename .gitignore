@@ -5,3 +5,4 @@ test-output
 .gwt
 .gradle
 /bin
+/.settings/gradle.prefs

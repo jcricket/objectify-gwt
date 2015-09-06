@@ -19,17 +19,14 @@ task clientApiJar(type: Jar){
 	baseName = 'clientApi'
 	from sourceSets.main.output
 	from sourceSets.main.allJava
-	include '**/shared/**'
 }
 
 task clientApiSourcesJar(type: Jar, dependsOn:classes) {
     from sourceSets.main.allJava
-	include '**/shared/**'
 }
 
 task clientApiJavadoc(type: Javadoc){
 	source = sourceSets.main.allJava
-	include '**/shared/**'
 	destinationDir new File(rootProject.buildDir,'apiJavaDoc')
 	destinationDir.mkdirs()
 }
