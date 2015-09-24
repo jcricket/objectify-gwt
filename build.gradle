@@ -54,6 +54,9 @@ sourceSets{
 		java{
 			srcDirs = ['src/main/resources/com/google/appengine/super','src/main/resources/com/googlecode/objectify/super']
 		}
+		resources{
+			srcDirs = []
+		}
 	}
 }
 
